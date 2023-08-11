@@ -1,6 +1,8 @@
 import PetsList from "../components/PetsList";
 import Filters from "../components/Filters";
 import {useState} from "react";
+import Button from "react-bootstrap/Button";
+import NewPetModal from "../components/NewPetModal";
 
 const pets = [
     {
@@ -48,6 +50,7 @@ const pets = [
 
 const Home = () => {
     const [filteredPets, setFilteredPets] = useState(pets)
+    const [showModal, setShowModal] = useState(false);
 
     const handleFilterPets = (race, type, location) => {
         setFilteredPets(
@@ -58,10 +61,23 @@ const Home = () => {
         )
     }
 
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
+    const handleAddPet = pet => {
+        pets.push(pet);
+        setShowModal(false)
+    }
+
     return(
-        <div style={{display:'flex', flexDirection: "column", gap: "2rem"}}>
+        <div style={{display:'flex', flexDirection: "column", gap: "2rem", alignItems: 'center'}}>
             <Filters filterPets={handleFilterPets} />
+            <Button style={{width: '20%'}} onClick={() => setShowModal(true)}>
+                Add New Pet
+            </Button>
             <PetsList pets={filteredPets} />
+            <NewPetModal showModal={showModal} handleClose={handleCloseModal} handleSave={handleAddPet}  />
         </div>
     )
 }
